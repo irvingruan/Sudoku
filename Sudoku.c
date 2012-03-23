@@ -4,22 +4,22 @@ Author: Irving Ruan
 Contact: irvingruan@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in 
-the Software without restriction, including without limitation the rights to 
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
 of the Software, and to permit persons to whom the Software is furnished to do
 so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all 
+The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-	
+
 Sudoku solver for a 9x9 sudoku layout written in C.
 
 */
@@ -40,75 +40,73 @@ int boardNotSolved();
 
 //Sample Sudoku layout
 int board[81] = {7, 9, 0, 0, 0, 0, 3, 0, 0,
-		   0, 0, 0, 0, 0, 6, 9, 0, 0,
-		   8, 0, 0, 0, 3, 0, 0, 7, 6,
-		   0, 0, 0, 0, 0, 5, 0, 0, 2,
-		   0, 0, 5, 4, 1, 8, 7, 0, 0,
-		   4, 0, 0, 7, 0, 0, 0, 0, 0,
-		   6, 1, 0, 0, 9, 0, 0, 0, 8,
-		   0, 0, 2, 3, 0, 0, 0, 0, 0,
-		   0, 0, 9, 0, 0, 0, 0, 5, 4};
+                   0, 0, 0, 0, 0, 6, 9, 0, 0,
+                   8, 0, 0, 0, 3, 0, 0, 7, 6,
+                   0, 0, 0, 0, 0, 5, 0, 0, 2,
+                   0, 0, 5, 4, 1, 8, 7, 0, 0,
+                   4, 0, 0, 7, 0, 0, 0, 0, 0,
+                   6, 1, 0, 0, 9, 0, 0, 0, 8,
+                   0, 0, 2, 3, 0, 0, 0, 0, 0,
+                   0, 0, 9, 0, 0, 0, 0, 5, 4};
 
 int bitmap[729];
 
-int main (int argc, char **argv) 
+int main (int argc, char **argv)
 {
 
     int i;
-    for (i = 0; i < 729; i++) 
-	{
-		bitmap[i] = 1;
-    }
+    for (i = 0; i < 729; i++)
+        bitmap[i] = 1;
 
     int k;
     for(i = 0; i < 81; i++)
-		checkAll(i);
-    
+        checkAll(i);
+
     i = 0;
     k = 0;
-    
-    while (boardNotSolved()) 
-	{
-		i = i % 80;
-		if (board[i] != 0) 
-		{
-	    	i++;
-	    	continue;
-		}
-		else {
-	    	for (k = 0; k < 9; k++) 
-			{
-				if (bitmap[(i * 9) + k] == 1)
-				{
-		    		if (bitCheckCol(i, k + 1) == 1 || bitCheckRow(i, k + 1) == 1)
-					{
-						clear(i, k + 1);
-						assignBoard(i);
-						break;
-		    		}
-				}
-	    	}
-	    	i++;
-		}
+
+    while (boardNotSolved())
+    {
+        i = i % 80;
+        if (board[i] != 0)
+        {
+            i++;
+            continue;
+        }
+        else {
+            for (k = 0; k < 9; k++)
+            {
+                if (bitmap[(i * 9) + k] == 1)
+                {
+                    if (bitCheckCol(i, k + 1) == 1 || bitCheckRow(i, k + 1) == 1)
+                        {
+                                                clear(i, k + 1);
+                                                assignBoard(i);
+                                                break;
+                                }
+                                }
+                }
+                i++;
+                }
     }
 
-    printBoard(); 
+    printBoard();
 
-	return 0;
-    
+        return 0;
+
 }
 
 
-void printBoard() 
+void printBoard()
 {
-	int i;
+        int i;
 
-	for (i = 0; i < 81; i++) 
-	{
-		printf("%d ", board[i]);
-		if ((i + 1) % 9 == 0) 
-			printf("\n");
-	}
+        for (i = 0; i < 81; i++)
+        {
+                printf("%d ", board[i]);
+                if ((i + 1) % 9 == 0)
+                        printf("\n");
+        }
 }
 
 void checkRow (int boardIndex)
@@ -120,17 +118,17 @@ void checkRow (int boardIndex)
     rowOffset = (boardIndex / 9) * 9;
     int i;
     for (i = rowOffset; i < (rowOffset + 9); i++)
-	{
-		if (board[i] != 0)
-		{
-	    	found = board[i];
-	    	bitmapOffset = (boardIndex * 9) + found - 1;
-	    	bitmap[bitmapOffset] = 0;
-		}
+        {
+                if (board[i] != 0)
+                {
+                found = board[i];
+                bitmapOffset = (boardIndex * 9) + found - 1;
+                bitmap[bitmapOffset] = 0;
+                }
     }
 }
 
-void checkColumn (int boardIndex) 
+void checkColumn (int boardIndex)
 {
     int colOffset;
     int found;
@@ -138,26 +136,26 @@ void checkColumn (int boardIndex)
 
     colOffset = boardIndex % 9;
     int i;
-    for (i = colOffset; i < 81; i += 9) 
-	{
-		if(board[i] != 0)
-		{
-	    	found = board[i];
-	    	bitmapOffset = (boardIndex * 9) + found - 1;
-	    	bitmap[bitmapOffset] = 0;
-		}
+    for (i = colOffset; i < 81; i += 9)
+        {
+                if(board[i] != 0)
+                {
+                found = board[i];
+                bitmapOffset = (boardIndex * 9) + found - 1;
+                bitmap[bitmapOffset] = 0;
+                }
     }
 }
 
 /* Performs a bitmap check and update on the boxes */
-void checkBox (int boardIndex) 
+void checkBox (int boardIndex)
 {
     int topLeft;
     int rowOffset;
     int topLeftRow;
     int colOffset;
     int topLeftCol;
-    
+
     rowOffset = (boardIndex / 9);
     colOffset = boardIndex % 9;
 
@@ -167,66 +165,66 @@ void checkBox (int boardIndex)
     topLeftCol = topLeftCol * 3;
     topLeft = topLeftRow * 9;
     topLeft = topLeft + topLeftCol;
-    
+
     int i;
     int found;
     int bitmapOffset;
-    
+
     for (i = topLeft; i < topLeft + 3; i++)
-	{
-		if (board[i] != 0)
-		{
-	    	found = board[i];
-	    	bitmapOffset = (boardIndex * 9) + found - 1;
-	    	bitmap[bitmapOffset] = 0;
-		}
+        {
+                if (board[i] != 0)
+                {
+                found = board[i];
+                bitmapOffset = (boardIndex * 9) + found - 1;
+                bitmap[bitmapOffset] = 0;
+                }
     }
     for (i = topLeft + 9; i < topLeft + 12; i++)
-	{
-		if (board[i] != 0) 
-		{
-	    	found = board[i];
-	    	bitmapOffset = (boardIndex * 9) + found - 1;
-	    	bitmap[bitmapOffset] = 0;
-		}
+        {
+                if (board[i] != 0)
+                {
+                found = board[i];
+                bitmapOffset = (boardIndex * 9) + found - 1;
+                bitmap[bitmapOffset] = 0;
+                }
     }
-    for (i = topLeft + 18; i < topLeft + 21; i++) 
-	{
-		if(board[i] != 0)
-		{
-	    	found = board[i];
-	    	bitmapOffset = (boardIndex * 9) + found - 1;
-	    	bitmap[bitmapOffset] = 0;
-		}
+    for (i = topLeft + 18; i < topLeft + 21; i++)
+        {
+                if(board[i] != 0)
+                {
+                found = board[i];
+                bitmapOffset = (boardIndex * 9) + found - 1;
+                bitmap[bitmapOffset] = 0;
+                }
     }
 }
 
-void checkAll (int boardIndex) 
+void checkAll (int boardIndex)
 {
     int i;
     int rowOffset;
     int bitmapOffset;
 
-    if (board[boardIndex] != 0) 
-	{
-		rowOffset = boardIndex * 9;
-		bitmapOffset = rowOffset + board[boardIndex] - 1;
-		for (i = rowOffset; i < (rowOffset + 9); i++) 
-		{
-	    	bitmap[i] = 0;
-		}   
-		bitmap[bitmapOffset] = 1;
+    if (board[boardIndex] != 0)
+        {
+                rowOffset = boardIndex * 9;
+                bitmapOffset = rowOffset + board[boardIndex] - 1;
+                for (i = rowOffset; i < (rowOffset + 9); i++)
+                {
+                bitmap[i] = 0;
+                }
+                bitmap[bitmapOffset] = 1;
     }
     else
-	{
-		checkRow(boardIndex);
-		checkColumn(boardIndex);
-		checkBox(boardIndex);
+        {
+                checkRow(boardIndex);
+                checkColumn(boardIndex);
+                checkBox(boardIndex);
     }
 }
 
 /* clears the values that are eliminated possibilities */
-void clear (int boardIndex, int num) 
+void clear (int boardIndex, int num)
 {
     int rowOffset;
     int bitmapOffset;
@@ -238,130 +236,130 @@ void clear (int boardIndex, int num)
     colOffset = boardIndex % 9;
     topLeft = (((rowOffset / 3) * 3) * 9) + ((colOffset / 3) * 3);
 
-    for (i = 0; i < 9; i++) 
-		bitmap[(boardIndex * 9) + i] = 0;
+    for (i = 0; i < 9; i++)
+                bitmap[(boardIndex * 9) + i] = 0;
 
     rowOffset = rowOffset * 9;
     bitmapOffset = (rowOffset * 9) + num - 1;
-    for (i = rowOffset; i < (rowOffset + 9); i++) 
-	{
-		bitmap[bitmapOffset] = 0;
-		bitmapOffset = bitmapOffset + 9;
+    for (i = rowOffset; i < (rowOffset + 9); i++)
+        {
+                bitmap[bitmapOffset] = 0;
+                bitmapOffset = bitmapOffset + 9;
     }
-    
+
     bitmapOffset = (colOffset * 9) + num - 1;
-    for (i = colOffset; i < 81; i += 9) 
-	{
-		bitmap[bitmapOffset] = 0;
-		bitmapOffset = bitmapOffset + 81;	
+    for (i = colOffset; i < 81; i += 9)
+        {
+                bitmap[bitmapOffset] = 0;
+                bitmapOffset = bitmapOffset + 81;
     }
-    
+
     bitmapOffset = (topLeft * 9) + num - 1;
-    for (i = topLeft; i < topLeft + 3; i++) 
-	{
-		bitmap[bitmapOffset] = 0;
-		bitmapOffset = bitmapOffset + 9;
+    for (i = topLeft; i < topLeft + 3; i++)
+        {
+                bitmap[bitmapOffset] = 0;
+                bitmapOffset = bitmapOffset + 9;
     }
-    
+
     bitmapOffset = (topLeft + 9) * 9 + num - 1;
-    for (i = 0; i < 3; i++) 
-	{
-		bitmap[bitmapOffset] = 0;
-		bitmapOffset = bitmapOffset + 9;
+    for (i = 0; i < 3; i++)
+        {
+                bitmap[bitmapOffset] = 0;
+                bitmapOffset = bitmapOffset + 9;
     }
-    
+
     bitmapOffset = (topLeft + 18) * 9 + num-1;
-    for (i = 0; i < 3; i ++) 
-	{
-		bitmap[bitmapOffset] = 0;
-		bitmapOffset = bitmapOffset + 9;
-    } 
+    for (i = 0; i < 3; i ++)
+        {
+                bitmap[bitmapOffset] = 0;
+                bitmapOffset = bitmapOffset + 9;
+    }
 
     bitmap[boardIndex * 9 + num - 1] = 1;
 }
 
 /* Returns true or false on whether it can insert or not */
-int bitCheckRow (int boardIndex, int num) 
+int bitCheckRow (int boardIndex, int num)
 {
     int rowOffset;
     int found = 0;
     int bitmapOffset;
 
     rowOffset = (boardIndex / 9) * 9;
-    
+
     int i;
-    
+
     bitmapOffset = (rowOffset * 9) + num -1;
-    for (i = rowOffset; i < (rowOffset + 9); i++) 
-	{
-		if (bitmap[bitmapOffset] == 1)
-	    	found++;
-	
-		bitmapOffset = bitmapOffset + 9;
+    for (i = rowOffset; i < (rowOffset + 9); i++)
+        {
+                if (bitmap[bitmapOffset] == 1)
+                found++;
+
+                bitmapOffset = bitmapOffset + 9;
     }
 
     if (found == 1)
-		return 1;
+                return 1;
     else
-		return 0;
+                return 0;
 
 }
 
 /* Returns true or false on whether it can insert possibility or not */
-int bitCheckCol (int boardIndex, int num) 
+int bitCheckCol (int boardIndex, int num)
 {
     int colOffset;
     int found = 0;
     int bitmapOffset;
-    
+
     colOffset = boardIndex % 9;
 
     int i;
     bitmapOffset = (colOffset * 9) + num - 1;
-    for (i = 0; i < 9; i++) 
-	{
-		if (bitmap[bitmapOffset] == 1)
-	    	found++;
-	
-		bitmapOffset = bitmapOffset + 81;
+    for (i = 0; i < 9; i++)
+        {
+                if (bitmap[bitmapOffset] == 1)
+                found++;
+
+                bitmapOffset = bitmapOffset + 81;
     }
 
     if (found == 1)
-		return 1;
+                return 1;
     else
-		return 0;
+                return 0;
 }
 
 /* Keeps on returning true as long as it finds a 0 cell */
-int boardNotSolved() 
+int boardNotSolved()
 {
     int i;
     int zero = 0;
-    
-    for (i = 0; i < 81; i++) 
-	{
-		if (board[i] == 0) 
-	    	zero++;
+
+    for (i = 0; i < 81; i++)
+        {
+                if (board[i] == 0)
+                zero++;
     }
-    
-	if (zero == 0)
-		return 0;
+
+        if (zero == 0)
+                return 0;
     else
-		return 1;
+                return 1;
 
 }
 
 /* Assigns known possibilities to each cell */
-void assignBoard (int boardIndex) 
+void assignBoard (int boardIndex)
 {
-    
+
     int i = 0;
 
-    while (i < 9 ) 
-	{
-		if (bitmap[(boardIndex * 9) + i]) 
-	    	break;
-		i++;
+    while (i < 9 )
+        {
+                if (bitmap[(boardIndex * 9) + i])
+                break;
+                i++;
     }
     board[boardIndex] = i + 1;
 }
